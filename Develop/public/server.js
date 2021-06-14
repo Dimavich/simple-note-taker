@@ -24,7 +24,7 @@ app.get('/api/notes', (req,res)=> res.sendFile(path.join(__dirname, 'db/db.json'
 
 
 
-// post to the db.json file
+// post rout
 app.post('/api/notes',(req,res) =>{
     let newNotes = req.body;
 
@@ -34,20 +34,33 @@ app.post('/api/notes',(req,res) =>{
         dbNotes = JSON.parse(data)
         dbNotes.push(newNotes)
         let number = 1;
-        dbNotes.forEach((note,index)=>{
+        dbNotes.forEach((note)=>{
             note.id=number;
             number++;
             return dbNotes;
         });
-        console.log(dbNotes);
+        console.log('Note added');
         stringNotes = JSON.stringify(dbNotes);
 
         fs.writeFile('./db/db.json', stringNotes, (err,data)=>{
             if (err) throw err;
         });
     });
-    res.sendFile(path.join(__dirname, 'notes.html'))
+    res.end();
 });
+
+app.delete('api/notes/:id', (req,res)=>{
+    let deleteNote = req.params.id;
+    console.log(deleteNote);
+
+    fs.readFile('./db.db.json', (err,data)=>{
+        if (err) throw err;
+    })
+
+    dbNotes = JSON.parse(data);
+
+    
+})
 
 // starts the server and listens
 app.listen(PORT, () => console.log(`App listening on PORT ${PORT}`));
